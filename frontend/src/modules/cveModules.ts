@@ -1,10 +1,10 @@
 // Codigo vibecodeado, usar con cuidado
 import type { VulnInfo } from "@/models";
 
-type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | "NONE";
+export type Severity = "CRITICAL" | "HIGH" | "MEDIUM" | "LOW" | "NONE";
 type CvssVersion = "4.0" | "3" | "2" | "distro";
 
-type CategorizedCve = {
+export type CategorizedCve = {
   id: string;
   vuln: VulnInfo;
   severity: Severity;
@@ -13,9 +13,14 @@ type CategorizedCve = {
   cvssVersion: CvssVersion;
 };
 
-type UnCategorizedCve = {
+export type UnCategorizedCve = {
   id: string;
   vuln: VulnInfo;
+};
+
+export type SortedCves = {
+  categorized: CategorizedCve[];
+  uncategorized: UnCategorizedCve[];
 };
 
 type CvssMetric = {
@@ -152,10 +157,9 @@ function getThreat(vuln: VulnInfo): Omit<CategorizedCve, "id" | "vuln"> | null {
   return advisoryCandidates[0] ?? null;
 }
 
-export function sortVulnsBySeverity(vulns: Record<string, VulnInfo>): {
-  categorized: CategorizedCve[];
-  uncategorized: UnCategorizedCve[];
-} {
+export function sortVulnsBySeverity(
+  vulns: Record<string, VulnInfo>,
+): SortedCves {
   const categorized: CategorizedCve[] = [];
   const uncategorized: UnCategorizedCve[] = [];
 

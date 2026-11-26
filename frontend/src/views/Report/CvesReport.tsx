@@ -1,5 +1,7 @@
 import type { VulnInfo } from "@/models";
 import { sortVulnsBySeverity } from "@/modules";
+import { CvesSummary } from "./CvesSummary";
+import type { Severity } from "@/modules/cveModules";
 
 function formatString(value: string | null | undefined) {
     return value === null || value === undefined || value.trim() === "" ? "N/A" : value;
@@ -12,7 +14,7 @@ function formatBoolean(value: boolean | null, negate: boolean = false) {
 }
 
 /** Mapea la severidad a clases de DaisyUI (solo presentación). */
-function severityStyles(severity: unknown): { badge: string; border: string } {
+function severityStyles(severity: Severity | undefined): { badge: string; border: string } {
     switch (String(severity ?? "").toLowerCase()) {
         case "critical":
             return { badge: "badge-error", border: "border-l-error" };
@@ -39,11 +41,14 @@ export function CveReport({ scannedCves }: { scannedCves: Record<string, VulnInf
     const cves = sortVulnsBySeverity(scannedCves);
     const hasCves = cves.uncategorized.length + cves.categorized.length;
 
+
     return (
         <section aria-label="CVEs encontrados">
             <div className="card bg-base-100 border border-base-300 shadow-sm print:shadow-none">
                 <div className="card-body gap-4">
                     <h2 className="card-title text-lg">CVEs Encontrados</h2>
+
+                    <CvesSummary cves={cves} />
 
                     {!hasCves && (
                         <p className="text-sm italic text-base-content/60">
@@ -84,6 +89,65 @@ export function CveReport({ scannedCves }: { scannedCves: Record<string, VulnInf
                                                 <dd className="font-medium">{c.cvssVersion}</dd>
                                             </div>
                                         </dl>
+
+                                        {c.vuln.affectedPackages !== null && (
+                                            <div className="space-y-2">
+                                                <h4 className="text-xs font-semibold uppercase tracking-wider text-base-content/60">
+                                                    Paquetes afectados
+                                                </h4>
+                                                <div className="overflow-x-auto rounded-box border border-base-200">
+                                                    <table className="table table-sm table-zebra">
+                                                        <caption className="sr-only">
+                                                            Paquetes afectados por {c.id}
+                                                        </caption>
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col" className="w-12 text-right">#</th>
+                                                                <th scope="col">Nombre</th>
+                                                                <th scope="col">Parcheado</th>
+                                                                <th scope="col">Estado del parche</th>
+                                                                <th scope="col">Arreglado en</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {c.vuln.affectedPackages.map((pkg, idx) => (
+                                                                <tr key={idx}>
+                                                                    <td className="text-right text-base-content/50 tabular-nums">
+                                                                        {idx + 1}
+                                                                    </td>
+                                                                    <td className="font-mono">{formatString(pkg.name)}</td>
+                                                                    <td>
+                                                                        <BooleanBadge value={pkg.notFixedYet} negate />
+                                                                    </td>
+                                                                    <td>{formatString(pkg.fixState)}</td>
+                                                                    <td className="font-mono">{formatString(pkg.fixedIn)}</td>
+                                                                </tr>
+                                                            ))}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </article>
+                                );
+                            })}
+                            {cves.uncategorized.map((c) => {
+                                const sev = severityStyles();
+                                return (
+                                    <article
+                                        key={c.id}
+                                        className={`border border-base-300 border-l-4 rounded-box p-4 space-y-3 bg-base-100`}
+                                    >
+                                        <header className="flex items-start justify-between gap-3 flex-wrap">
+                                            <h3 className="font-mono font-semibold text-base break-all">
+                                                {c.id}
+                                            </h3>
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className={`badge ${sev.badge} badge-sm uppercase`}>
+                                                    Sin categorizar
+                                                </span>
+                                            </div>
+                                        </header>
 
                                         {c.vuln.affectedPackages !== null && (
                                             <div className="space-y-2">
