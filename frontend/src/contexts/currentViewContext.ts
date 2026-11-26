@@ -2,7 +2,6 @@ import { createContext, useContext } from "react";
 
 export const CurrentView = {
   ReportView: "report-view",
-  TestView: "test-view",
 } as const;
 
 export type CurrentView = (typeof CurrentView)[keyof typeof CurrentView];

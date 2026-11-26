@@ -1,8 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
 using Ryn.Core;
 using Ryn.Ipc;
+using Ryn.Plugins.Dialog;
+using Ryn.Plugins.FileSystem;
 using VulsManager.Commands;
-using VulsManager.Serialization;
 
 namespace VulsManager;
 
@@ -11,6 +11,8 @@ public static class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        var homeDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+
         var app = RynApplication
             .CreateBuilder()
             .ConfigureOptions(opts =>
@@ -22,10 +24,11 @@ public static class Program
             })
             .ConfigureServices(services =>
             {
-                services.AddSingleton<ScanResultSerializer>();
-
                 services.AddRynCommands();
                 services.AddExampleCommands();
+                services.AddReportCommands();
+                services.AddRynDialog();
+                services.AddRynFileSystem(fs => fs.AllowedPaths.Add(homeDir));
             })
             .Build();
 

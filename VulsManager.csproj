@@ -16,5 +16,7 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Ryn" Version="0.39.1" />
+        <PackageReference Include="Ryn.Plugins.Dialog" Version="0.39.1" />
+        <PackageReference Include="Ryn.Plugins.FileSystem" Version="0.39.1" />
     </ItemGroup>
 </Project>

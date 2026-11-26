@@ -4,7 +4,7 @@ using VulsManager.Models;
 
 namespace VulsManager.Serialization;
 
-public class ScanResultSerializer
+public static class ScanResultSerializer
 {
     private static readonly JsonTypeInfo<ScanResult> ScanResultTypeInfo = ScanResultJsonContext
         .Default

@@ -1,5 +1,7 @@
 {
-  "capabilities": {
-    "app": true
-  }
+    "capabilities": {
+        "app": true,
+        "dialog": true,
+        "report": true
+    }
 }

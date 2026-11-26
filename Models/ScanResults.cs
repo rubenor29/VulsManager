@@ -33,10 +33,10 @@ public class ScanResult
     public string Release { get; set; } = string.Empty;
 
     [JsonPropertyName("container")]
-    public Container Container { get; set; } = null!; // Pendiente: tipo Container
+    public Container Container { get; set; } = null!;
 
     [JsonPropertyName("platform")]
-    public Platform Platform { get; set; } = null!; // Pendiente: tipo Platform
+    public Platform Platform { get; set; } = null!;
 
     [JsonPropertyName("ipv4Addrs")]
     public List<string>? Ipv4Addrs { get; set; }
