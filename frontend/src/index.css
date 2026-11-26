@@ -1,0 +1,140 @@
+/* ─────────────────────────────────────────────────────────────
+   Estilos específicos de impresión para ReportView
+   (window.print() → salida en A4 con fondo blanco y sin toolbar)
+   ───────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: A4;
+    margin: 2cm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Ocultar chrome de la app al imprimir */
+  .report-toolbar,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Contenedor principal sin fondo ni padding extra */
+  .report-view {
+    background: #fff !important;
+    min-height: 0 !important;
+  }
+
+  .report-content {
+    padding: 1.5cm 1.2cm !important;
+    margin: 0 !important;
+    max-width: none !important;
+  }
+
+  /* Ritmo vertical adaptado a papel */
+  .report-article {
+    gap: 1.75rem !important;
+  }
+
+  .report-article-header h1 {
+    font-size: 1.5rem !important;
+    margin-top: 0.25rem !important;
+  }
+
+  /* Evitar cortes feos a mitad de bloque */
+  .report-article > *,
+  .report-article section,
+  .card,
+  .alert,
+  table,
+  pre {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* Forzar que se impriman fondos de badges/tablas con color */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Mostrar URL de los enlaces al imprimir */
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555;
+  }
+
+  .card {
+    box-shadow: none !important;
+    border-color: #d1d5db !important;
+    background: #fff !important;
+  }
+
+  /* Las filas dt/dd del OS summary no deben cortarse entre páginas */
+  dl > div {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Badges legibles en B/N o escala de grises */
+  .badge {
+    border: 1px solid #6b7280 !important;
+  }
+
+  /* Repetir cabecera de tabla si se corta entre páginas */
+  thead {
+    display: table-header-group;
+  }
+  tfoot {
+    display: table-footer-group;
+  }
+
+  /* Ninguna fila se parte a la mitad */
+  tr,
+  td,
+  th {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Tablas: borde limpio en papel, sin zebra (se ve gris sucio) */
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 0.85rem !important;
+  }
+  thead th {
+    border-bottom: 1.5px solid #374151 !important;
+    background: #f3f4f6 !important;
+  }
+  tbody tr:nth-child(even) {
+    background: transparent !important;
+  }
+  tbody td,
+  tbody th {
+    border-bottom: 1px solid #e5e7eb !important;
+  }
+
+  /* IPs: monoespaciado y permite wrap en IPv6 largas */
+  td.font-mono {
+    font-family:
+      ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+    word-break: break-all !important;
+  }
+
+  /* Evitar que una sub-sección (IPv4/IPv6) quede huérfana */
+  section > h3 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+}
