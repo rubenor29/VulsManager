@@ -14,7 +14,7 @@ function formatBoolean(value: boolean | null, negate: boolean = false) {
 }
 
 /** Mapea la severidad a clases de DaisyUI (solo presentación). */
-function severityStyles(severity: Severity | undefined): { badge: string; border: string } {
+function severityStyles(severity: Severity | undefined = undefined): { badge: string; border: string } {
     switch (String(severity ?? "").toLowerCase()) {
         case "critical":
             return { badge: "badge-error", border: "border-l-error" };
