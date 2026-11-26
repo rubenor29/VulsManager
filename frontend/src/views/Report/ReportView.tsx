@@ -85,6 +85,7 @@ export function ReportView() {
                             {viewState.mode === "file-found" && viewState.filePath}
                         </span>
                     </button>
+                    <button className="btn btn-accent" onClick={window.print}>Imprimir</button>
                 </div>
             </header>
 
